@@ -1,8 +1,7 @@
+@import './global.scss';
+
 .root {
 	height: 100vh;
 	width: 100%;
-	overflow: auto;
-	* {
-		font-family: 'Comfortaa', cursive;
-	}
+	overflow: hidden;
 }

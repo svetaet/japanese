@@ -1,0 +1,80 @@
+@import 'scss';
+
+.CardViewBack {
+	z-index: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+	background-color: #ffffff00;
+	backdrop-filter: blur(30px) saturate(100%);
+
+	overflow: auto;
+}
+.CardView {
+	min-width: 0;
+	border-radius: s(3);
+	margin: s(10);
+	padding: s(8);
+	@include shadow;
+	@include look(def, true);
+}
+.Top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.Title {
+	font-size: v(font-l);
+}
+.TranslationButton {
+	padding: 0 s(1) !important;
+	transition: background-color 0.2s, color 0.2s;
+
+	&Active {
+		background-color: v(clr4);
+		color: v(clr1);
+	}
+}
+.Tags {
+	margin: s(3) 0 0;
+}
+.Tag {
+	font-size: v(font-xs);
+	margin: s(1) s(2) s(1) 0;
+}
+.Text,
+.Examples,
+.Table {
+	margin: s(12) 0 0;
+}
+.Example {
+	margin: s(5) 0 0;
+}
+
+.Table {
+	display: flex;
+	flex-flow: row nowrap;
+
+	&Column {
+		&:last-child p {
+			border-right: solid 1px v(clr4);
+		}
+
+		display: flex;
+		flex-flow: column nowrap;
+
+		p {
+			padding: s(2);
+			border-left: solid 1px v(clr4);
+			border-top: solid 1px v(clr4);
+			line-height: 30px;
+
+			&:last-child {
+				border-bottom: solid 1px v(clr4);
+			}
+		}
+	}
+}

@@ -7,6 +7,7 @@ declare namespace ButtonMScssNamespace {
 		ButtonContent: string
 		ButtonFill: string
 		ButtonIcon: string
+		ButtonText: string
 		disabled: string
 	}
 }

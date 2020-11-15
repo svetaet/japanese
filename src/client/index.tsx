@@ -4,14 +4,17 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import { DEV_MODE } from 'common/constants'
-import { App } from 'ui/App'
 import { ThemeProvider } from 'ui/Theme'
+import { SearchProvider } from 'ui/SearchState'
+import { App } from 'App'
 import { root } from 'root'
 
 const Root = DEV_MODE ? hot(App) : App
 render(
 	<ThemeProvider>
-		<Root />
+		<SearchProvider>
+			<Root />
+		</SearchProvider>
 	</ThemeProvider>,
 	root,
 )

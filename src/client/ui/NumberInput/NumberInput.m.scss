@@ -1,0 +1,13 @@
+@import 'scss';
+
+.NumberInput {
+	@include look(def, true);
+	border: none;
+	text-align: center;
+	width: 40px;
+	margin: 0 s(1);
+	border-bottom: solid 1px v(clr3);
+	&:focus {
+		border-color: v(clr4);
+	}
+}

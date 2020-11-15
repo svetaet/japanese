@@ -1,0 +1,74 @@
+@import 'scss';
+
+.Search {
+	flex: 1;
+	@include shadow(4);
+	@include look(inb, true);
+	background: #fff7db30;
+	backdrop-filter: blur(30px) saturate(100%);
+	border-radius: s(3);
+	padding: s(3);
+
+	display: flex;
+	align-items: center;
+
+	:global(.outline) &:focus-within {
+		outline: auto -webkit-focus-ring-color;
+	}
+}
+
+.Tag {
+	font-size: v(font-xs);
+	margin: 0 s(3) 0 0;
+	&:first-child {
+		margin-left: s(2);
+	}
+}
+.TagIcon {
+	color: v(clr-red);
+}
+
+.InputWrap {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+}
+
+.Input {
+	width: 100%;
+	composes: ResetInput from 'scss/compose.scss';
+	::-webkit-search-cancel-button {
+		display: none;
+	}
+}
+.SearchIcon {
+	font-size: v(font-xs);
+	margin: 0 s(3) 0 s(2);
+}
+.CloseIcon {
+	cursor: pointer;
+	font-size: v(font-s);
+	margin: 0 s(3);
+}
+
+@keyframes color-shift {
+	0% {
+		background-color: #ffb5894f;
+	}
+	20% {
+		background-color: #ff6ec04f;
+	}
+	40% {
+		background-color: #e4b3ff4f;
+	}
+	60% {
+		background-color: #89ffd84f;
+	}
+	80% {
+		background-color: #c6ff614f;
+	}
+	100% {
+		background-color: #ffb5894f;
+	}
+}

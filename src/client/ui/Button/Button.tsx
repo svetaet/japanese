@@ -14,12 +14,13 @@ export type ButtonP = Omit<NativeButtonP, 'onClick'> & {
 	text: string
 	onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 	disabled?: boolean
+	iconClassName?: string
 }
-export const Button = ({ text, onClick, disabled, className, ...props }: ButtonP) => {
+export const Button = ({ text, onClick, disabled, className, iconClassName, ...props }: ButtonP) => {
 	return (
 		<button
 			className={clsx(className, s.Button, { [s.disabled]: disabled })}
-			onClick={onClick}
+			onClick={disabled ? undefined : onClick}
 			tabIndex={disabled ? -1 : undefined}
 			{...props}
 		>
@@ -27,8 +28,8 @@ export const Button = ({ text, onClick, disabled, className, ...props }: ButtonP
 			<div className={BottomBorderStyle} />
 			<div className={s.ButtonFill} />
 			<div className={s.ButtonContent}>
-				<Square className={s.ButtonIcon} />
-				<span>{text}</span>
+				<Square className={s.ButtonIcon + (iconClassName ? ' ' + iconClassName : '')} />
+				<p className={s.ButtonText}>{text}</p>
 			</div>
 		</button>
 	)

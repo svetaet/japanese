@@ -1,9 +1,8 @@
 declare namespace AppMScssNamespace {
 	export interface IAppMScss {
 		App: string
-		AppCenter: string
-		BottomLine: string
-		ThemeSwitch: string
+		Cards: string
+		Center: string
 	}
 }
 

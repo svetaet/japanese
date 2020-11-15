@@ -1,0 +1,31 @@
+@import 'scss';
+
+.Dropdown {
+	position: relative;
+
+	display: flex;
+	flex-direction: column;
+}
+.Toggle {
+	composes: ResetInput from 'scss/compose.scss';
+	cursor: pointer;
+	font-weight: bold;
+
+	display: flex;
+	align-items: center;
+
+	&Icon {
+		margin: 0 s(3) 0 0;
+		&OnRight {
+			margin: 0 0 0 s(3);
+		}
+	}
+}
+.ContentWrap {
+	overflow: hidden;
+	top: 100%;
+	width: 100%;
+}
+.Content {
+	will-change: transform;
+}

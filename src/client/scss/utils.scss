@@ -1,22 +1,5 @@
 @import './theme';
 
-// SCSS has it's own rgba function which can not be used with the native css vars
-// because it's result has been calculated during scss compilation
-@function native-rgba($var, $opacity) {
-	@return #{'rgba(#{v($var)}, #{$opacity})'};
-}
-
-// Spacing unit variable var(--s) multiplier
-@function s($n: 1) {
-	@if ($n == 0) {
-		@return 0;
-	} @else if ($n == 1) {
-		@return v(s);
-	} @else {
-		@return calc(#{v(s)} * #{$n});
-	}
-}
-
 // Background and text colors combinations (looks)
 $looks: [def alt inb inv];
 @mixin look($look: def, $transition: false) {
@@ -48,8 +31,52 @@ $looks: [def alt inb inv];
 		box-shadow: 0 0 2px 2px $color;
 	} @else if ($size == 2) {
 		box-shadow: 0 0 4px 4px $color;
+	} @else if ($size == 3) {
+		box-shadow: 0 0 5px 5px $color;
+	} @else if ($size == 4) {
+		box-shadow: 0 0 10px 8px $color;
 	} @else {
 		@error "Wrong $size: #{$size} in @mixin shadow.";
+	}
+}
+
+@mixin insetShadow($size: 1, $color: v(sclr)) {
+	@if ($size == 0) {
+		box-shadow: inset 0 0 2px 0px $color;
+	} @else if ($size == 1) {
+		box-shadow: inset 0 0 2px 2px $color;
+	} @else if ($size == 2) {
+		box-shadow: inset 0 0 4px 4px $color;
+	} @else if ($size == 3) {
+		box-shadow: inset 0 0 5px 5px $color;
+	} @else if ($size == 4) {
+		box-shadow: inset 0 0 10px 8px $color;
+	} @else {
+		@error "Wrong $size: #{$size} in @mixin shadow.";
+	}
+}
+
+@mixin scrollColor($color: v(border-clr)) {
+	&::-webkit-scrollbar-thumb {
+		border-color: $color !important;
+	}
+	&::-webkit-scrollbar-corner {
+		background-color: $color !important;
+	}
+}
+
+@mixin textOverflow($lines: 1) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	@if ($lines == 1) {
+		white-space: nowrap;
+	} @else {
+		// This is hack forcing browser to render properly.
+		visibility: visible;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: $lines;
 	}
 }
 

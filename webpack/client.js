@@ -1,10 +1,8 @@
-const { HotModuleReplacementPlugin, NamedModulesPlugin, NamedChunksPlugin } = require('webpack')
-const merge = require('webpack-merge')
-const NameAllModulesPlugin = require('name-all-modules-plugin')
+const { merge } = require('webpack-merge')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const { UnusedFilesWebpackPlugin } = require('unused-files-webpack-plugin')
+const UnusedWebpackPlugin = require('unused-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
@@ -18,15 +16,16 @@ const getClassNameHash = require('./getClassNameHash')
 const getCommonConfig = require('./getCommonConfig')
 
 const devConfig = {
+	target: 'web',
 	devtool: 'eval-source-map',
 	devServer: {
 		publicPath: '/',
 		contentBase: paths.client.output,
+		stats: 'minimal',
 		hot: true,
 		historyApiFallback: true,
 		port: 3001,
 	},
-	plugins: [new HotModuleReplacementPlugin()],
 	resolve: { alias: { 'react-dom': '@hot-loader/react-dom' } },
 }
 
@@ -36,7 +35,7 @@ const prodConfig = {
 		path: paths.client.output,
 		filename: '[name].[contenthash:4].js',
 		chunkFilename: '[name].[contenthash:4].js',
-		publicPath: '/',
+		publicPath: './',
 	},
 	plugins: [
 		// Inline webpack runtime in html
@@ -46,23 +45,12 @@ const prodConfig = {
 		// Preload font
 		new PreloadWebpackPlugin({ include: 'allAssets', fileBlacklist: [/\.js/, /\.css/] }),
 
-		// Long term Caching
-		new NamedModulesPlugin(),
-		new NamedChunksPlugin(
-			chunk =>
-				chunk.name ||
-				[...chunk._modules]
-					.map(m => path.relative(m.context, m.userRequest.substring(0, m.userRequest.lastIndexOf('.'))))
-					.join('_'),
-		),
-		new NameAllModulesPlugin(),
-
 		// Gzip compression
-		new CompressionPlugin({ test: /\.(js|css)$/, deleteOriginalAssets: false }),
+		// new CompressionPlugin({ test: /\.(js|css)$/, deleteOriginalAssets: false }),
 
 		// Minify and terminate duplication for css file
 		new MiniCssExtractPlugin({ filename: '[name].[contenthash:4].css', chunkFilename: '[id].[contenthash:4].css' }),
-		new OptimizeCssAssetsPlugin({ assetNameRegExp: /\.css$/ }),
+		new CssMinimizerPlugin(),
 
 		// Anallyze bundle size
 		new BundleAnalyzerPlugin({
@@ -73,17 +61,18 @@ const prodConfig = {
 		}),
 
 		// Delete uncompressed assets after them being inspected by BundleAnalyzerPlugin
-		new DeleteFilesPlugin({ test: /\.(js|css)$/, dir: paths.client.output }),
+		// new DeleteFilesPlugin({ test: /\.(js|css)$/, dir: paths.client.output }),
 	],
 	optimization: {
 		usedExports: true,
 		minimize: true,
 		minimizer: [new TerserPlugin()],
 		runtimeChunk: 'single',
-		moduleIds: 'hashed',
+		moduleIds: 'named',
+		chunkIds: 'named',
 		splitChunks: {
 			cacheGroups: {
-				vendor: {
+				defaultVendors: {
 					test: /[\\/]node_modules[\\/]/,
 					name: 'vendor',
 					chunks: 'all',
@@ -113,23 +102,24 @@ module.exports = (env, argv) => {
 					template: 'src/client/assets/template.html',
 					title: 'nest-react',
 				}),
-				new UnusedFilesWebpackPlugin({
-					patterns: ['src/client/**/*.*', 'src/common/**/*.*'],
-					globOptions: { ignore: ['**/*.d.ts', '**/*.test.ts'] },
-				}),
+				// new UnusedWebpackPlugin({
+				// 	directories: [paths.client.path, paths.common.path],
+				// 	exclude: ['**/*.d.ts', '**/*.test.ts'],
+				// 	root: paths.src,
+				// }),
 			],
 			module: {
 				rules: [
 					{
 						test: /\.m\.scss$/,
 						include: paths.src,
-						loader: [styleLoader, '@teamsupercell/typings-for-css-modules-loader', cssLoader, 'sass-loader'],
+						use: [styleLoader, '@teamsupercell/typings-for-css-modules-loader', cssLoader, 'sass-loader'],
 					},
 					{
 						test: /\.scss$/,
 						exclude: /\.m\.scss$/,
 						include: paths.src,
-						loader: [styleLoader, 'css-loader', 'sass-loader'],
+						use: [styleLoader, 'css-loader', 'sass-loader'],
 					},
 					{
 						test: /\.woff2$/,

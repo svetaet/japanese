@@ -1,0 +1,26 @@
+@import 'scss';
+
+.Card {
+	border-radius: s(3);
+	margin: s(3);
+	padding: s(3) s(2) s(3) s(4);
+	@include shadow(1);
+	@include look(def, true);
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	&Title {
+		composes: ResetInput from 'scss/compose.scss';
+		cursor: pointer;
+		text-align: left;
+	}
+}
+.Tag {
+	font-size: v(font-xs);
+	margin: s(1) s(2);
+}
+.ActiveTagIcon {
+	color: v(clr-red);
+}

@@ -1,7 +1,7 @@
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const NodeExternals = require('webpack-node-externals')
 const NodemonPlugin = require('nodemon-webpack-plugin')
-const { UnusedFilesWebpackPlugin } = require('unused-files-webpack-plugin')
+const UnusedWebpackPlugin = require('unused-webpack-plugin')
 
 const { paths } = require('./paths')
 const getCommonConfig = require('./getCommonConfig')
@@ -18,9 +18,10 @@ module.exports = (env, argv) =>
 			__dirname: false,
 		},
 		plugins: [
-			new UnusedFilesWebpackPlugin({
-				patterns: ['src/server/**/*.*', 'src/common/**/*.*'],
-				globOptions: { ignore: ['**/*.d.ts', '**/*.test.ts'] },
+			new UnusedWebpackPlugin({
+				directories: [paths.server.path, paths.common.path],
+				exclude: ['**/*.d.ts', '**/*.test.ts'],
+				root: paths.src,
 			}),
 			new NodemonPlugin(),
 		],
